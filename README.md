@@ -1,5 +1,5 @@
 # python
-Some little projects when I am learning python
+--Some little projects when I am learning python--
 
 
 isprime:

@@ -1,6 +1,7 @@
 # python
 Some little projects when I am learning python
 
+
 isprime:
 
 分解质因子，未加对输入类型的判断，时间复杂度较高

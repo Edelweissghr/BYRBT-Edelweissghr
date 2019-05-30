@@ -12,4 +12,4 @@
 
 ·byrbt:
 
- 利用 https://sc.ftqq.com/3.version ，byrbt每次更新免费种时微信提醒我
+ 利用[ServerChan](https://sc.ftqq.com/3.version) ，byrbt每次更新免费种时微信提醒我

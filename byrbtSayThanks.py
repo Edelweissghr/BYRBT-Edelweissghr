@@ -2,15 +2,18 @@ import requests
 
 def sayThanks(URL, start, end):
     url = URL + '/thanks.php'
-    myCookies = {'_ga': 'GA1.2.1744326621.1557064441',
-               '_gid': 'GA1.2.860613550.1557064441',
-               'byrbta': '0',
-               'c_secure_login': 'bm9wZQ%3D%3D',
-               'c_secure_pass': '74c382f7d11a80eb7223a13bf0a2520b',
-               'c_secure_ssl': 'eWVhaA%3D%3D',
-               'c_secure_tracker_ssl': 'bm9wZQ%3D%3D',
-               'c_secure_uid': 'MjUxMjQ4'
+    
+    #填写自己的cookie信息
+    myCookies = {'_ga': '',
+               '_gid': '',
+               'byrbta': '',
+               'c_secure_login': '',
+               'c_secure_pass': '',
+               'c_secure_ssl': '',
+               'c_secure_tracker_ssl': '',
+               'c_secure_uid': ''
                }
+    #设置请求头
     myHeaders = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36 ",
                  "Accept-Language": "en,zh-CN;q=0.9,zh;q=0.8"}
 

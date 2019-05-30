@@ -12,8 +12,8 @@ def sleeptime(min, sec = 0):
 # 每次访问时得到页面内免费种ID列表
 def getTorrentList(url):
     
-	# Chrome可利用"EditThisCookie"插件，得到网站cookie，填入自己的cookie
-	cookies = {'_ga': '',
+    # Chrome可利用"EditThisCookie"插件，得到网站cookie，填入自己的cookie
+    cookies = {'_ga': '',
                '_gid': '',
                'byrbta': '',
                'byrbta1': '',
@@ -27,7 +27,7 @@ def getTorrentList(url):
                'c_secure_uid': ''
                }
     
-	result = {}
+    result = {}
     res = requests.get(url, cookies = cookies)
     res.encoding = 'utf-8'
     soup = BeautifulSoup(res.text, 'html.parser')
@@ -35,8 +35,8 @@ def getTorrentList(url):
     torrentsList = []
     download = []
     
-	# 免费种子的class是'free_bg'，标签为tr
-	trs = soup.find_all(class_ = 'free_bg')
+    # 免费种子的class是'free_bg'，标签为tr
+    trs = soup.find_all(class_ = 'free_bg')
     for tr in trs:
         for link in tr.find_all('a'):
             if 'download' in link.get('href'):
@@ -59,19 +59,18 @@ def getDownloadList(listOld, listNew):
 # ServerChan (https://sc.ftqq.com/3.version) 向目的网址提交请求	
 def send(download):
     
-	# 填入自己的SCKEY
-	SCKEY = ''
+    # 填入自己的SCKEY
+    SCKEY = ''
     serverURL = 'http://sc.ftqq.com/' + SCKEY + '.send'
     desp = ''
     
-	# 更新免费种子时，则微信推送告知我
-	if len(download) != 0:
+    # 更新免费种子时，则微信推送告知我
+    if len(download) != 0:
         for a in download:
             desp += str(a)
             desp += '_'
         # print(desp)
         r = requests.post(url = serverURL, data = {'text': 'byrbt更新免费种啦！', 'desp': desp[:-1]})
-    
 
 url = 'https://bt.byr.cn/torrents.php'
 listNew = []
@@ -88,4 +87,3 @@ while 1==1:
     # print('download: ', download, '\n')
     send(download)
     time.sleep(second)
-    

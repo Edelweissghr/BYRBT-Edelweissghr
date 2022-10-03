@@ -16,7 +16,7 @@
  
 ·byrbtSayThanks:
 
-  对byrbt种子id批量点击“说谢谢”
+  对byrbt种子id批量点击“说谢谢”，对其他PT站同样有参考意义，部分站点可通过“说谢谢”获取少量魔力值
   
 ·byrbtFreeRemind:
 

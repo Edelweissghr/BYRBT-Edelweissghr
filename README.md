@@ -18,3 +18,6 @@
 
   对byrbt种子id批量点击“说谢谢”
   
+·byrbtFreeRemind:
+
+  更新免费种时通过webui访问qbittorrent，自动添加种子并下载

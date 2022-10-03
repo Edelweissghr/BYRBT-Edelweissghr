@@ -1,0 +1,117 @@
+import re
+import sys
+import time
+import requests
+import bs4
+from bs4 import BeautifulSoup
+import json
+from qbittorrentapi import Client
+
+def sleeptime(min, sec = 0):
+    return min*60 + sec
+
+listAll = []
+#数组去重
+def delRepeat(a):
+    new_a = []
+    for i in a:
+        if i not in new_a:
+            new_a.append(i)
+    return new_a
+
+def getTorrentList(url):
+    # 填入自己的cookie
+    cookies = {'_ga': '',
+               '_gid': '',
+               'byrbta': '0',
+               'byrbta1': '0',
+               'byrbta2': '0',
+               'byrbta3': '0',
+               'byrbta4': '0',
+               'c_secure_login': '',
+               'c_secure_pass': '',
+               'c_secure_ssl': '',
+               'c_secure_tracker_ssl': '',
+               'c_secure_uid': ''
+               }
+    result = {}
+    res = requests.get(url, cookies = cookies)
+    res.encoding = 'utf-8'
+    soup = BeautifulSoup(res.text, 'html.parser')
+    torrentsList = []
+    download = []
+    trs = soup.find_all('tr', class_ = 'free_bg') #免费种
+    trs1 = soup.find_all('tr', class_ = 'twoupfree_bg') #2X免费种
+    trs += trs1
+    #print(trs)
+    torrentBytes = []
+    torrentSizes = []
+    
+    for tr in trs[::2]:
+        #取出种子大小
+        fileSize = str(re.findall(r'</span></td><td class=\"rowfollow\">.*</td><',str(tr))[0])[34:-6].replace('<br/>','')
+        
+        torrentBytes.append(re.findall('.*class=\"rowfollow\"\>(.*)\<br\/\>.*',str(tr))) #10GB的10
+        torrentSizes.append(re.findall('.*\<br\/\>(.*)\<\/td\>\<td align=\"center\".*',str(tr))) #10GB的GB
+        
+        for link in tr.find_all('a'):
+            if 'download' in link.get('href'):
+                torrentsList.append('id=' + link.get('href')[16:] + ' & size=' + fileSize)
+                
+                
+    torrentsList = delRepeat(torrentsList) #去重
+    
+    return torrentsList
+    
+def getDownloadList(listOld, listNew):
+    for torrent in listNew:
+        if torrent not in listOld:
+            downloadList.append(torrent)
+    return downloadList
+
+def download(torrentId):
+
+    client = Client(host = 'localhost:8080', username = 'admin', password = '123456') #qbittorrent的webui配置
+    
+    downloadURL = 'https://byr.pt/download.php?id=' + torrentId + '&passkey=' #填入自己的passkey
+    client.torrents_add(urls = downloadURL)
+
+def send(downloadList):
+    SCKEY = '' #此处可填自己的方糖SCKEY
+    serverURL = 'http://sc.ftqq.com/' + SCKEY + '.send'
+    WXPusherURL = 'http://wxpusher.zjiecode.com/api/send/message'
+    
+    desp = ''
+    if len(downloadList) != 0:
+        for a in downloadList:
+            desp += str(a)
+            desp += '\n'
+            print(re.findall('id=.* &',str(a))[0][3:-2])
+            download(re.findall('id=.* &',str(a))[0][3:-2])
+
+        dataWXPusher = {
+            'appToken' : '', #此处可填自己的WXPusher appToken
+            'content' : desp[:-1],
+            'summary' : 'byrbt更新免费种啦！',
+            'contentType' : 2,
+            'topicIds' : [] #更改topicIds
+        }
+    
+
+url = 'https://byr.pt/torrents.php'
+
+listNew = []
+second = sleeptime(5)
+listNew = getTorrentList(url)#新加测试 第一次运行时不添加之前的免费种
+
+while 1==1:
+
+    print('time: ', time.asctime(time.localtime(time.time())))
+    listOld = listNew
+    listNew = getTorrentList(url)
+    listNew = delRepeat(listNew)
+    downloadList = []
+    getDownloadList(listOld, listNew)
+    
+    send(downloadList)
+    time.sleep(second)
